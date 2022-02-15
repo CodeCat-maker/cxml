@@ -1,0 +1,6 @@
+/Users/wangzepeng/代码/c:c++/cxml/build/CMakeFiles/rebuild_cache.dir
+/Users/wangzepeng/代码/c:c++/cxml/build/CMakeFiles/edit_cache.dir
+/Users/wangzepeng/代码/c:c++/cxml/build/CMakeFiles/cxml.dir
+/Users/wangzepeng/代码/c:c++/cxml/build/src/CMakeFiles/rebuild_cache.dir
+/Users/wangzepeng/代码/c:c++/cxml/build/src/CMakeFiles/edit_cache.dir
+/Users/wangzepeng/代码/c:c++/cxml/build/src/CMakeFiles/CxmlFunction.dir
