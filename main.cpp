@@ -4,7 +4,7 @@ int main()
 {
 
     CXMLNode *root = parse_from_string("\
-        <bookstore>\n\
+        <bookstore company=\"codecat\" boss = \"man\">\n\
             <book category=\"CHILDREN\">\n\
                 <title>Harry Potter</title>\n\
                 <author>J K.Rowling</author>\n\

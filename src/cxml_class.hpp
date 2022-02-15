@@ -2,7 +2,11 @@
 #define __CXMLCLASS__H_
 #include <cstring>
 #include <iostream>
+#include <map>
+#include <vector>
+using std::__1::map;
 using std::__1::string;
+using std::__1::vector;
 
 class Node
 {
@@ -15,24 +19,34 @@ public:
         return name;
     }
 };
-//私有继承基类的属性
-class CXMLNode_attr : private Node
+//每个节点的属性
+class CXMLNode_attr : public Node
 {
-private:
-    string value; //子节点值
+public:
+    map<string, string> attributes;
+    int nums;
+
 public:
     CXMLNode_attr();
 };
+//节点
 class CXMLNode : public Node
 {
 public:
-    string content;            //节点包含的内容
-    int content_length;        //内容长度
+    string content;            //节点包含内容
     Node *parent;              //节点的父节点指针
     Node *children;            //节点的子节点指针
     CXMLNode_attr *attributes; //包含子节点的指针
 public:
     CXMLNode();
+};
+
+class CXMLNode_text : public Node
+{
+public:
+    vector<string> content; //文本数组
+    int lens;               //多少组文本
+    CXMLNode_text();        //构造函数
 };
 
 #endif

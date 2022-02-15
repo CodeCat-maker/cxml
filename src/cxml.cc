@@ -64,48 +64,82 @@ CXMLNode *parse_from_string(string cxml)
     return head;
 }
 
-const char *parser_element_name(const char *ptr, char **name)
+bool parser_element_name(const string ptr, string &name)
 {
+    const char *p = ptr.c_str();
     int len = 0;
-    ptr = skip(ptr);
-    const char *p = ptr;
+    p = skip(p);
 
     while (*p != ' ' && *p != '>')
     {
         if (*p == '\0' || *p == '<' || *p == '\"' || *p == '=') //非法字符
         {
             CXML_PARSER_STATUS = CXML_SYNTAX_ERROR;
-            return p;
+            return false;
         }
         len++;
         p++;
     }
-
-    *name = new char[len + 1];
-    memset(*name, '\0', len + 1);
-    strncpy(*name, ptr, len);
-    return p;
+    name = ptr.substr(0, len);
+    return true;
 }
 
-void parse_node(const char *cxml, CXMLNode *root)
+bool parse_node_attr(const string cxml, CXMLNode *root)
 {
-    const char *ptr = cxml;
+    string str = cxml;
+    string attr_name, attr_value;
+    CXMLNode_attr *attrs = new CXMLNode_attr();
+    string _str = str.substr(str.find(root->name) - 1, str.find('>') + 1);
+    size_t equal_pos = 0;
+
+    while (_str.find('=') != equal_pos)
+    {
+        equal_pos = _str.find('=');
+        _str = _str.substr(_str.find(' '));
+        attr_name = _str.substr(0, _str.find('='));
+        _str = _str.substr(_str.find('\"') + 1);
+        attr_value = _str.substr(0, _str.find('\"'));
+        attrs->attributes.insert(std::pair<string, string>(attr_name, attr_value));
+        attrs->nums++;
+        cout << attr_name << " " << attr_value << std::endl;
+        if (_str.find('=') > _str.length())
+            break;
+    }
+    root->parent = root;
+    return true;
+}
+
+bool parse_node(const string cxml, CXMLNode *root)
+{
+    const char *ptr = cxml.c_str();
     ptr = skip(ptr);
     if (*ptr != '<')
     {
         CXML_PARSER_STATUS = CXML_SYNTAX_ERROR;
-        return;
+        return false;
     }
     root->content = ptr;
     ptr++;
-    char *eleName;
-    ptr = parser_element_name(ptr, &eleName);
-    root->name = eleName;
-    if (XML_PARSE_STATUS != XML_PARSE_SUCCESS)
-        return;
-    ptr = skip(ptr);
-    //代表是单标签
-    if (*ptr == '/')
+    string eleName;
+    if (parser_element_name(ptr, eleName) == false)
     {
+        CXML_PARSER_STATUS = CXML_SYNTAX_ERROR;
+        return false;
+    };
+    root->name = eleName;
+    size_t bpos = string(cxml).find(eleName);
+    size_t epos = string(cxml).rfind(eleName);
+
+    if (bpos == epos)
+    {
+        CXML_PARSER_STATUS = CXML_SYNTAX_ERROR;
+        return false;
     }
+    root->content = string(cxml).substr(bpos + root->name.length() + 1, epos - root->name.length() - 4);
+    if (parse_node_attr(cxml, root) == false)
+    {
+        CXML_PARSER_STATUS = CXML_SYNTAX_ERROR;
+        return false;
+    }
+    return true;
 }

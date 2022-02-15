@@ -2,16 +2,20 @@
 
 CXMLNode_attr::CXMLNode_attr()
 {
-    name = "";
-    value = "";
-    perv = next = nullptr;
+    next = perv = nullptr;
+    nums = 0;
 }
 
 CXMLNode::CXMLNode()
 {
     name = content = "";
-    content_length = 0;
     parent = children = nullptr;
     perv = next = nullptr;
     attributes = nullptr;
+}
+
+CXMLNode_text::CXMLNode_text()
+{
+    perv = next = nullptr;
+    lens = 0;
 }

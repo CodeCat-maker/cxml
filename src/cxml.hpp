@@ -12,10 +12,10 @@
 #include <algorithm>
 bool is_open_label(char *label);
 bool blank(char c);
-const char *skip(const char *pointer);
-const char *parser_element_name(const char *ptr, char **name);
+const string skip(const string pointer);
+bool parser_element_name(const string ptr, char **name);
+bool parse_node(const string cxml, CXMLNode *root);
+bool parse_node_attr(const string cxml, CXMLNode *root);
 CXMLNode *parse_from_string(string cxml);
-
-void parse_node(const char *ptr, CXMLNode *root);
 
 #endif
