@@ -9,9 +9,9 @@ CXMLNode_attr::CXMLNode_attr()
 CXMLNode::CXMLNode()
 {
     name = content = "";
-    parent = children = nullptr;
+    parent = nullptr;
     perv = next = nullptr;
-    attributes = nullptr;
+    attr = nullptr;
 }
 
 CXMLNode_text::CXMLNode_text()

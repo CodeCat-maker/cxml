@@ -8,14 +8,17 @@
 #define CXML_SYN_HTML 0
 #define CXML_SYN_STRICT 1
 
-#include "cxml_class.hpp"
-#include <algorithm>
-bool is_open_label(char *label);
-bool blank(char c);
-const string skip(const string pointer);
-bool parser_element_name(const string ptr, char **name);
-bool parse_node(const string cxml, CXMLNode *root);
-bool parse_node_attr(const string cxml, CXMLNode *root);
-CXMLNode *parse_from_string(string cxml);
+#define maxLength 1000000
 
+#include "cxml_class.hpp"
+#include <stack>
+#include <algorithm>
+bool is_blank(char c);
+void strip(string &str);
+bool is_open(string name);
+CXMLNode *parse_node_element_text(const string cxml, CXMLNode *root);
+CXMLNode *parse_node_element_attr(const string cxml, CXMLNode *root);
+CXMLNode *parse_node_element_name(const string cxml, CXMLNode *root);
+CXMLNode *parse_node(const string cxml, CXMLNode *root);
+CXMLNode *parse_from_string(const string cxml);
 #endif

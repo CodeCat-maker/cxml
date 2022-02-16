@@ -33,10 +33,10 @@ public:
 class CXMLNode : public Node
 {
 public:
-    string content;            //节点包含内容
-    Node *parent;              //节点的父节点指针
-    Node *children;            //节点的子节点指针
-    CXMLNode_attr *attributes; //包含子节点的指针
+    string content;              //节点包含内容
+    CXMLNode *parent;            //节点的父节点指针
+    vector<CXMLNode *> children; //节点的子节点指针
+    CXMLNode_attr *attr;         //包含子节点的指针
 public:
     CXMLNode();
 };

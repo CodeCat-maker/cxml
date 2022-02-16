@@ -1,145 +1,188 @@
 #include "cxml.hpp"
 using std::cout;
+using std::__1::stack;
 //设置解析状态
 int CXML_PARSER_STATUS = CXML_PARSER_SUCCESS;
+//节点栈
+stack<CXMLNode *> st;
 
 //单口节点
-const char *open_labels[] = {"br", "hr", "img", "input",
-                             "meta", "area", "base", "col",
-                             "command", "embed", "keygen", "param",
-                             "source", "track", "wbr", "link"};
-
-bool is_open_label(const char *label)
-{
-    for (int i = 0; i < 16; i++)
-    {
-        if (std::strcmp(label, open_labels[i]))
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool blank(char c)
+const string open_labels[] = {"br", "hr", "img", "input",
+                              "meta", "area", "base", "col",
+                              "command", "embed", "keygen", "param",
+                              "source", "track", "wbr", "link"};
+//跳过空格
+bool is_blank(char c)
 {
     return (c == ' ' || c == '\n' || c == '\r' || c == '\t');
 }
-
-const char *skip(const char *ptr)
+//跳过空格
+void strip(string &str)
 {
-    while (*ptr != '\0' && blank(*ptr))
+    const char *ptr = str.c_str();
+    while (*ptr != '\0' && is_blank(*ptr))
         ptr++;
-    return ptr;
+
+    str = ptr;
 }
-//从字符串解析
-CXMLNode *parse_from_string(string cxml)
+//判断是否是单口标签
+bool is_open(string name)
 {
-
-    const char *ptr = cxml.c_str();
-    if (cxml.length() == 0)
+    for (int i = 0; i < 16; i++)
     {
-        CXML_PARSER_STATUS = CXML_CONTENT_EMPTY;
-        return nullptr;
-    }
-    while (*ptr != '<')
-        ptr++;
-    char *dt = new char[100];
-    memset(dt, '\0', 100);
-    strncpy(dt, ptr + 2, 7);
-
-    if (!strcmp(dt, "doctype"))
-    {
-        while (*ptr != '>')
-            ptr++;
-        ptr += 1;
-    }
-
-    CXMLNode *root = new CXMLNode();
-    parse_node(ptr, root);
-
-    CXMLNode *head = new CXMLNode();
-    head->children = root;
-
-    return head;
-}
-
-bool parser_element_name(const string ptr, string &name)
-{
-    const char *p = ptr.c_str();
-    int len = 0;
-    p = skip(p);
-
-    while (*p != ' ' && *p != '>')
-    {
-        if (*p == '\0' || *p == '<' || *p == '\"' || *p == '=') //非法字符
+        if (name.compare(open_labels[i]) == 0)
         {
-            CXML_PARSER_STATUS = CXML_SYNTAX_ERROR;
             return false;
         }
-        len++;
-        p++;
     }
-    name = ptr.substr(0, len);
     return true;
 }
 
-bool parse_node_attr(const string cxml, CXMLNode *root)
+string find_rigth_element_name(const string cxml)
+{
+    string name;
+    string str = cxml;
+    size_t pos = str.find("</");
+    int i = 0;
+    while (str[i + (int)pos] != '>')
+    {
+        i++;
+    }
+    name = str.substr(pos).substr(2, i - 2);
+    return name;
+}
+
+void debug_stack()
+{
+    cout << st.size() << "\n";
+}
+//解析节点文字
+CXMLNode *parse_node_element_text(const string cxml, CXMLNode *root)
+{
+    return nullptr;
+}
+//解析节点属性
+CXMLNode *parse_node_element_attr(const string cxml, CXMLNode *root)
 {
     string str = cxml;
     string attr_name, attr_value;
     CXMLNode_attr *attrs = new CXMLNode_attr();
     string _str = str.substr(str.find(root->name) - 1, str.find('>') + 1);
     size_t equal_pos = 0;
-
-    while (_str.find('=') != equal_pos)
+    while (_str.find('=') != equal_pos && _str.find('=') < maxLength)
     {
         equal_pos = _str.find('=');
         _str = _str.substr(_str.find(' '));
         attr_name = _str.substr(0, _str.find('='));
+        strip(attr_name);
         _str = _str.substr(_str.find('\"') + 1);
         attr_value = _str.substr(0, _str.find('\"'));
+        strip(attr_value);
         attrs->attributes.insert(std::pair<string, string>(attr_name, attr_value));
         attrs->nums++;
-        cout << attr_name << " " << attr_value << std::endl;
+
+        cout << "属性名:" << attr_name << " "
+             << "属性值:" << attr_value << std::endl;
         if (_str.find('=') > _str.length())
             break;
     }
-    root->parent = root;
-    return true;
+    root->attr = attrs;
+    return root;
+}
+//解析节点名称
+CXMLNode *parse_node_element_name(const string cxml, CXMLNode *root)
+{
+    size_t blank_pos = cxml.find(" ");
+    size_t l_pos = cxml.find("<");
+    size_t r_pos = cxml.find(">");
+
+    if (l_pos > maxLength || r_pos > maxLength)
+    {
+        CXML_PARSER_STATUS = CXML_SYNTAX_ERROR;
+        return nullptr;
+    }
+    string name;
+
+    if (blank_pos < r_pos && blank_pos < maxLength)
+    {
+        name = cxml.substr(l_pos + 1, blank_pos - 1);
+    }
+    else
+    {
+        name = cxml.substr(l_pos + 1, r_pos - 1);
+    }
+    if (name.find("/") < maxLength)
+        name = "/" + find_rigth_element_name(cxml);
+    root->name = name;
+    return root;
 }
 
-bool parse_node(const string cxml, CXMLNode *root)
+//解析节点
+CXMLNode *parse_node(const string cxml, CXMLNode *root)
 {
-    const char *ptr = cxml.c_str();
-    ptr = skip(ptr);
-    if (*ptr != '<')
+    string str = cxml;
+    strip(str);
+    if (str.find("<") > maxLength)
+        return nullptr;
+    root = parse_node_element_name(str, root);
+    root = parse_node_element_attr(str, root);
+    //如果解析名称为单口标签
+    if (is_open(root->name) == true)
     {
-        CXML_PARSER_STATUS = CXML_SYNTAX_ERROR;
-        return false;
+        //递归下一个
     }
-    root->content = ptr;
-    ptr++;
-    string eleName;
-    if (parser_element_name(ptr, eleName) == false)
+    //判断 <> 和 </>的位置
+    cout << "当前节点名称" << root->name << " "
+         << "父节点名称" << st.top()->name << std::endl;
+    if (str.find("</" + root->name) < str.rfind("</") && str.rfind("</") < maxLength)
     {
-        CXML_PARSER_STATUS = CXML_SYNTAX_ERROR;
-        return false;
-    };
-    root->name = eleName;
-    size_t bpos = string(cxml).find(eleName);
-    size_t epos = string(cxml).rfind(eleName);
+        str = str.substr(str.find("</" + root->name) + 1);
+        str = str.substr(str.find(">") + 1);
+        CXMLNode *head = st.top();
+        root->parent = head;
+        CXMLNode *child = new CXMLNode();
+        root->children.push_back(child);
+        parse_node(str, child);
+    }
+    else
+    {
+        str = str.substr(str.find(">") + 1);
+        CXMLNode *head = st.top();
+        root->parent = head;
+        str = str.substr(0, str.find("</" + root->name));
+        st.push(root);
+        CXMLNode *child = new CXMLNode();
+        root->children.push_back(child);
+        // cout << str << std::endl;
+        parse_node(str, child);
+    }
+    return root;
+}
+//从字符串解析xml
+CXMLNode *parse_from_string(const string cxml)
+{
+    //如果为空直接返回异常
+    if (cxml.length() == 0)
+    {
+        CXML_PARSER_STATUS = CXML_CONTENT_EMPTY;
+        return nullptr;
+    }
+    string str = cxml;
+    //删除DOCTYPE这一行
+    if (str.find("!DOCTYPE") < maxLength)
+    {
+        str = str.substr(str.find(">") + 1);
+    }
+    //删除xml这一行
+    if (str.find("?xml") < maxLength)
+    {
+        str = str.substr(str.find(">") + 1);
+    }
+    //开始解析
+    CXMLNode *root = new CXMLNode();
+    CXMLNode *head = new CXMLNode();
+    st.push(head);
+    head->children.push_back(parse_node(str, root));
 
-    if (bpos == epos)
-    {
-        CXML_PARSER_STATUS = CXML_SYNTAX_ERROR;
-        return false;
-    }
-    root->content = string(cxml).substr(bpos + root->name.length() + 1, epos - root->name.length() - 4);
-    if (parse_node_attr(cxml, root) == false)
-    {
-        CXML_PARSER_STATUS = CXML_SYNTAX_ERROR;
-        return false;
-    }
-    return true;
+    return head;
 }
