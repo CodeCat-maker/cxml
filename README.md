@@ -89,6 +89,18 @@ cmake .
 make ..
 ```
 
+## 反馈
+
+```
+解析到的属性:
+key:category value:CHILDREN
+解析子节点 及节点值
+title:Harry Potter
+author:J K.Rowlingk
+year:2005
+price:29.99
+```
+
 # 设计
 
 ## 1.主逻辑
