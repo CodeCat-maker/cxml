@@ -30,23 +30,23 @@ public:
     CXMLNode_attr();
 };
 //节点
-class CXMLNode : public Node
-{
-public:
-    string content;              //节点包含内容
-    CXMLNode *parent;            //节点的父节点指针
-    vector<CXMLNode *> children; //节点的子节点指针
-    CXMLNode_attr *attr;         //包含子节点的指针
-public:
-    CXMLNode();
-};
 
 class CXMLNode_text : public Node
 {
 public:
-    vector<string> content; //文本数组
-    int lens;               //多少组文本
-    CXMLNode_text();        //构造函数
+    string content;  //文本数组
+    int lens;        //多少组文本
+    CXMLNode_text(); //构造函数
 };
-
+class CXMLNode : public Node
+{
+public:
+    string content;              //节点注释
+    CXMLNode *parent;            //节点的父节点指针
+    vector<CXMLNode *> children; //节点的子节点指针
+    CXMLNode_attr *attr;         //包含子节点的指针
+    CXMLNode_text *text;         //文本节点
+public:
+    CXMLNode();
+};
 #endif

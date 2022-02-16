@@ -32,10 +32,10 @@ bool is_open(string name)
     {
         if (name.compare(open_labels[i]) == 0)
         {
-            return false;
+            return true;
         }
     }
-    return true;
+    return false;
 }
 
 string find_rigth_element_name(const string cxml)
@@ -59,7 +59,24 @@ void debug_stack()
 //解析节点文字
 CXMLNode *parse_node_element_text(const string cxml, CXMLNode *root)
 {
-    return nullptr;
+    CXMLNode_text *node_text = new CXMLNode_text();
+    if (is_open(root->name))
+    {
+        node_text->content = "";
+        root->text = node_text;
+        return root;
+    }
+
+    string text = "";
+    string str = cxml;
+    str = str.substr(str.find(">") + 1);
+    str = str.substr(0, str.find("<"));
+
+    strip(str);
+    node_text->content = str;
+    node_text->lens = str.length();
+    root->text = node_text;
+    return root;
 }
 //解析节点属性
 CXMLNode *parse_node_element_attr(const string cxml, CXMLNode *root)
@@ -111,8 +128,9 @@ CXMLNode *parse_node_element_name(const string cxml, CXMLNode *root)
     {
         name = cxml.substr(l_pos + 1, r_pos - 1);
     }
-    if (name.find("/") < maxLength)
-        name = "/" + find_rigth_element_name(cxml);
+
+    if (name.find("/") < name.length() || name.empty())
+        name = find_rigth_element_name(cxml);
     root->name = name;
     return root;
 }
@@ -120,40 +138,44 @@ CXMLNode *parse_node_element_name(const string cxml, CXMLNode *root)
 //解析节点
 CXMLNode *parse_node(const string cxml, CXMLNode *root)
 {
+    std::puts("==========");
     string str = cxml;
     strip(str);
     if (str.find("<") > maxLength)
         return nullptr;
     root = parse_node_element_name(str, root);
     root = parse_node_element_attr(str, root);
+    root = parse_node_element_text(str, root);
     //如果解析名称为单口标签
+    //cout << root->name << " " << st.top()->name << std::endl;
     if (is_open(root->name) == true)
     {
         //递归下一个
     }
-    //判断 <> 和 </>的位置
-    cout << "当前节点名称" << root->name << " "
-         << "父节点名称" << st.top()->name << std::endl;
-    if (str.find("</" + root->name) < str.rfind("</") && str.rfind("</") < maxLength)
+    if (root->name.find(st.top()->name) < root->name.length() && st.top()->name != "")
     {
-        str = str.substr(str.find("</" + root->name) + 1);
-        str = str.substr(str.find(">") + 1);
-        CXMLNode *head = st.top();
-        root->parent = head;
-        CXMLNode *child = new CXMLNode();
-        root->children.push_back(child);
-        parse_node(str, child);
+        strip(str);
+        str.erase(0, str.find("</" + root->name + ">") + root->name.length() + 3);
+        cout << "出栈" << root->name << std::endl;
+        CXMLNode *brother = new CXMLNode();
+        //st.top()->parent->children.push_back(brother);
+        st.pop();
+        cout << "栈顶元素:" << st.top()->name << std::endl;
+        parse_node(str, brother);
     }
     else
     {
+        strip(str);
         str = str.substr(str.find(">") + 1);
-        CXMLNode *head = st.top();
-        root->parent = head;
-        str = str.substr(0, str.find("</" + root->name));
-        st.push(root);
+        //cout << str << std::endl;
         CXMLNode *child = new CXMLNode();
-        root->children.push_back(child);
-        // cout << str << std::endl;
+        root->parent = st.top();
+        cout << "栈顶元素:" << st.top()->name << std::endl;
+        st.top()->children.push_back(root);
+        st.push(root);
+        cout << "入栈:" << root->name << std::endl;
+
+        //root->children.push_back(child);
         parse_node(str, child);
     }
     return root;
@@ -181,8 +203,31 @@ CXMLNode *parse_from_string(const string cxml)
     //开始解析
     CXMLNode *root = new CXMLNode();
     CXMLNode *head = new CXMLNode();
+    root->parent = head;
     st.push(head);
     head->children.push_back(parse_node(str, root));
-
     return head;
+}
+
+map<CXMLNode *, bool> used;
+//dfs搜索
+CXMLNode *search(const string target, CXMLNode *root)
+{
+    //cout << (root->name == target) << std::endl;
+    if (root->name == target)
+    {
+        return root;
+    }
+    for (auto m : root->children)
+    {
+        if (used.count(m) == 0)
+        {
+            used.insert({m, true});
+            CXMLNode *result = search(target, m);
+            if (result != nullptr)
+                return result;
+            used.erase(m);
+        }
+    }
+    return nullptr;
 }
