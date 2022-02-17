@@ -98,12 +98,12 @@ src/clean: src/CMakeFiles/CxmlFunction.dir/clean
 CMakeFiles/cxml.dir/all: src/CMakeFiles/CxmlFunction.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cxml.dir/build.make CMakeFiles/cxml.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cxml.dir/build.make CMakeFiles/cxml.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/wangzepeng/代码/c:c++/cxml/build/CMakeFiles --progress-num=4,5 "Built target cxml"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/wangzepeng/代码/c:c++/cxml/build/CMakeFiles --progress-num=5,6 "Built target cxml"
 .PHONY : CMakeFiles/cxml.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/cxml.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/wangzepeng/代码/c:c++/cxml/build/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/wangzepeng/代码/c:c++/cxml/build/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/cxml.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/wangzepeng/代码/c:c++/cxml/build/CMakeFiles 0
 .PHONY : CMakeFiles/cxml.dir/rule
@@ -124,12 +124,12 @@ CMakeFiles/cxml.dir/clean:
 src/CMakeFiles/CxmlFunction.dir/all:
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/CxmlFunction.dir/build.make src/CMakeFiles/CxmlFunction.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/CxmlFunction.dir/build.make src/CMakeFiles/CxmlFunction.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/wangzepeng/代码/c:c++/cxml/build/CMakeFiles --progress-num=1,2,3 "Built target CxmlFunction"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/wangzepeng/代码/c:c++/cxml/build/CMakeFiles --progress-num=1,2,3,4 "Built target CxmlFunction"
 .PHONY : src/CMakeFiles/CxmlFunction.dir/all
 
 # Build rule for subdir invocation for target.
 src/CMakeFiles/CxmlFunction.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/wangzepeng/代码/c:c++/cxml/build/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/wangzepeng/代码/c:c++/cxml/build/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/CxmlFunction.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/wangzepeng/代码/c:c++/cxml/build/CMakeFiles 0
 .PHONY : src/CMakeFiles/CxmlFunction.dir/rule

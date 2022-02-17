@@ -48,5 +48,29 @@ public:
     CXMLNode_text *text;         //文本节点
 public:
     CXMLNode();
+    //获取节点名字
+    string get_name() const;
+    //获取节点文字
+    string get_text() const;
+    //获取节点属性
+    map<string, string> get_attrs() const;
+    //获取父节点
+    CXMLNode *get_parent() const;
+    //获取一个子节点
+    CXMLNode *get_child() const;
+    //获取所有子节点
+    vector<CXMLNode *> get_children() const;
+    //获取子节点数量
+    int get_children_size() const;
 };
+//xpath解析结果
+class CXMLNode_result
+{
+public:
+    CXMLNode *element;           //一个节点
+    vector<CXMLNode *> elements; //多个节点
+    string text;                 //结果文本
+    CXMLNode_result();
+};
+
 #endif

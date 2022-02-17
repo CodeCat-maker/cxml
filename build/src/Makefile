@@ -178,6 +178,30 @@ cxml_class.cc.s:
 	cd /Users/wangzepeng/代码/c:c++/cxml/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/CxmlFunction.dir/build.make src/CMakeFiles/CxmlFunction.dir/cxml_class.cc.s
 .PHONY : cxml_class.cc.s
 
+xpath.o: xpath.cc.o
+.PHONY : xpath.o
+
+# target to build an object file
+xpath.cc.o:
+	cd /Users/wangzepeng/代码/c:c++/cxml/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/CxmlFunction.dir/build.make src/CMakeFiles/CxmlFunction.dir/xpath.cc.o
+.PHONY : xpath.cc.o
+
+xpath.i: xpath.cc.i
+.PHONY : xpath.i
+
+# target to preprocess a source file
+xpath.cc.i:
+	cd /Users/wangzepeng/代码/c:c++/cxml/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/CxmlFunction.dir/build.make src/CMakeFiles/CxmlFunction.dir/xpath.cc.i
+.PHONY : xpath.cc.i
+
+xpath.s: xpath.cc.s
+.PHONY : xpath.s
+
+# target to generate assembly for a file
+xpath.cc.s:
+	cd /Users/wangzepeng/代码/c:c++/cxml/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/CxmlFunction.dir/build.make src/CMakeFiles/CxmlFunction.dir/xpath.cc.s
+.PHONY : xpath.cc.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -193,6 +217,9 @@ help:
 	@echo "... cxml_class.o"
 	@echo "... cxml_class.i"
 	@echo "... cxml_class.s"
+	@echo "... xpath.o"
+	@echo "... xpath.i"
+	@echo "... xpath.s"
 .PHONY : help
 
 

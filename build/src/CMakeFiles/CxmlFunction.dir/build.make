@@ -97,19 +97,35 @@ src/CMakeFiles/CxmlFunction.dir/cxml_class.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CxmlFunction.dir/cxml_class.cc.s"
 	cd /Users/wangzepeng/代码/c:c++/cxml/build/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/wangzepeng/代码/c:c++/cxml/src/cxml_class.cc -o CMakeFiles/CxmlFunction.dir/cxml_class.cc.s
 
+src/CMakeFiles/CxmlFunction.dir/xpath.cc.o: src/CMakeFiles/CxmlFunction.dir/flags.make
+src/CMakeFiles/CxmlFunction.dir/xpath.cc.o: ../src/xpath.cc
+src/CMakeFiles/CxmlFunction.dir/xpath.cc.o: src/CMakeFiles/CxmlFunction.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/wangzepeng/代码/c:c++/cxml/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/CxmlFunction.dir/xpath.cc.o"
+	cd /Users/wangzepeng/代码/c:c++/cxml/build/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/CxmlFunction.dir/xpath.cc.o -MF CMakeFiles/CxmlFunction.dir/xpath.cc.o.d -o CMakeFiles/CxmlFunction.dir/xpath.cc.o -c /Users/wangzepeng/代码/c:c++/cxml/src/xpath.cc
+
+src/CMakeFiles/CxmlFunction.dir/xpath.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/CxmlFunction.dir/xpath.cc.i"
+	cd /Users/wangzepeng/代码/c:c++/cxml/build/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/wangzepeng/代码/c:c++/cxml/src/xpath.cc > CMakeFiles/CxmlFunction.dir/xpath.cc.i
+
+src/CMakeFiles/CxmlFunction.dir/xpath.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CxmlFunction.dir/xpath.cc.s"
+	cd /Users/wangzepeng/代码/c:c++/cxml/build/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/wangzepeng/代码/c:c++/cxml/src/xpath.cc -o CMakeFiles/CxmlFunction.dir/xpath.cc.s
+
 # Object files for target CxmlFunction
 CxmlFunction_OBJECTS = \
 "CMakeFiles/CxmlFunction.dir/cxml.cc.o" \
-"CMakeFiles/CxmlFunction.dir/cxml_class.cc.o"
+"CMakeFiles/CxmlFunction.dir/cxml_class.cc.o" \
+"CMakeFiles/CxmlFunction.dir/xpath.cc.o"
 
 # External object files for target CxmlFunction
 CxmlFunction_EXTERNAL_OBJECTS =
 
 src/libCxmlFunction.a: src/CMakeFiles/CxmlFunction.dir/cxml.cc.o
 src/libCxmlFunction.a: src/CMakeFiles/CxmlFunction.dir/cxml_class.cc.o
+src/libCxmlFunction.a: src/CMakeFiles/CxmlFunction.dir/xpath.cc.o
 src/libCxmlFunction.a: src/CMakeFiles/CxmlFunction.dir/build.make
 src/libCxmlFunction.a: src/CMakeFiles/CxmlFunction.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/wangzepeng/代码/c:c++/cxml/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX static library libCxmlFunction.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/wangzepeng/代码/c:c++/cxml/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX static library libCxmlFunction.a"
 	cd /Users/wangzepeng/代码/c:c++/cxml/build/src && $(CMAKE_COMMAND) -P CMakeFiles/CxmlFunction.dir/cmake_clean_target.cmake
 	cd /Users/wangzepeng/代码/c:c++/cxml/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/CxmlFunction.dir/link.txt --verbose=$(VERBOSE)
 

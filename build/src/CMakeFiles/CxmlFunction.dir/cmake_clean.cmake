@@ -3,6 +3,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/CxmlFunction.dir/cxml.cc.o.d"
   "CMakeFiles/CxmlFunction.dir/cxml_class.cc.o"
   "CMakeFiles/CxmlFunction.dir/cxml_class.cc.o.d"
+  "CMakeFiles/CxmlFunction.dir/xpath.cc.o"
+  "CMakeFiles/CxmlFunction.dir/xpath.cc.o.d"
   "libCxmlFunction.a"
   "libCxmlFunction.pdb"
 )

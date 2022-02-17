@@ -76,6 +76,7 @@ CXMLNode *parse_node_element_text(const string cxml, CXMLNode *root)
     node_text->content = str;
     node_text->lens = str.length();
     root->text = node_text;
+
     return root;
 }
 //解析节点属性
@@ -98,8 +99,7 @@ CXMLNode *parse_node_element_attr(const string cxml, CXMLNode *root)
         attrs->attributes.insert(std::pair<string, string>(attr_name, attr_value));
         attrs->nums++;
 
-        cout << "属性名:" << attr_name << " "
-             << "属性值:" << attr_value << std::endl;
+        //cout << "属性名:" << attr_name << " "<< "属性值:" << attr_value << std::endl;
         if (_str.find('=') > _str.length())
             break;
     }
@@ -138,29 +138,37 @@ CXMLNode *parse_node_element_name(const string cxml, CXMLNode *root)
 //解析节点
 CXMLNode *parse_node(const string cxml, CXMLNode *root)
 {
-    std::puts("==========");
+    //std::puts("==========");
     string str = cxml;
     strip(str);
     if (str.find("<") > maxLength)
         return nullptr;
-    root = parse_node_element_name(str, root);
-    root = parse_node_element_attr(str, root);
-    root = parse_node_element_text(str, root);
+    try
+    {
+        root = parse_node_element_name(str, root);
+        root = parse_node_element_attr(str, root);
+        root = parse_node_element_text(str, root);
+    }
+    catch (const std::exception &e)
+    {
+        CXML_PARSER_STATUS = CXML_SYNTAX_ERROR;
+        cout << "解析异常" << std::endl;
+        std::cerr << e.what() << '\n';
+        return nullptr;
+    }
+
     //如果解析名称为单口标签
     //cout << root->name << " " << st.top()->name << std::endl;
-    if (is_open(root->name) == true)
-    {
-        //递归下一个
-    }
+
     if (root->name.find(st.top()->name) < root->name.length() && st.top()->name != "")
     {
         strip(str);
         str.erase(0, str.find("</" + root->name + ">") + root->name.length() + 3);
-        cout << "出栈" << root->name << std::endl;
+        //cout << "出栈" << root->name << std::endl;
         CXMLNode *brother = new CXMLNode();
         //st.top()->parent->children.push_back(brother);
         st.pop();
-        cout << "栈顶元素:" << st.top()->name << std::endl;
+        //cout << "栈顶元素:" << st.top()->name << std::endl;
         parse_node(str, brother);
     }
     else
@@ -170,10 +178,19 @@ CXMLNode *parse_node(const string cxml, CXMLNode *root)
         //cout << str << std::endl;
         CXMLNode *child = new CXMLNode();
         root->parent = st.top();
-        cout << "栈顶元素:" << st.top()->name << std::endl;
+
+        //cout << "栈顶元素:" << st.top()->name << std::endl;
         st.top()->children.push_back(root);
-        st.push(root);
-        cout << "入栈:" << root->name << std::endl;
+        //解析单口标签
+        if (is_open(root->name) == true)
+        {
+            str.substr(str.find(">") + 1);
+        }
+        else
+        {
+            st.push(root);
+            //cout << "入栈:" << root->name << std::endl;
+        }
 
         //root->children.push_back(child);
         parse_node(str, child);

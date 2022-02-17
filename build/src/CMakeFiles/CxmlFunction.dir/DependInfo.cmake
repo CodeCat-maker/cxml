@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/wangzepeng/代码/c:c++/cxml/src/cxml.cc" "src/CMakeFiles/CxmlFunction.dir/cxml.cc.o" "gcc" "src/CMakeFiles/CxmlFunction.dir/cxml.cc.o.d"
   "/Users/wangzepeng/代码/c:c++/cxml/src/cxml_class.cc" "src/CMakeFiles/CxmlFunction.dir/cxml_class.cc.o" "gcc" "src/CMakeFiles/CxmlFunction.dir/cxml_class.cc.o.d"
+  "/Users/wangzepeng/代码/c:c++/cxml/src/xpath.cc" "src/CMakeFiles/CxmlFunction.dir/xpath.cc.o" "gcc" "src/CMakeFiles/CxmlFunction.dir/xpath.cc.o.d"
   )
 
 # Targets to which this target links.

@@ -1,2 +1,2 @@
-/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc libCxmlFunction.a CMakeFiles/CxmlFunction.dir/cxml.cc.o CMakeFiles/CxmlFunction.dir/cxml_class.cc.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc libCxmlFunction.a CMakeFiles/CxmlFunction.dir/cxml.cc.o CMakeFiles/CxmlFunction.dir/cxml_class.cc.o CMakeFiles/CxmlFunction.dir/xpath.cc.o
 /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib libCxmlFunction.a

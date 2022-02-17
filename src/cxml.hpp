@@ -13,6 +13,7 @@
 #include "cxml_class.hpp"
 #include <stack>
 #include <algorithm>
+
 bool is_blank(char c);
 void strip(string &str);
 bool is_open(string name);
@@ -22,4 +23,5 @@ CXMLNode *parse_node_element_name(const string cxml, CXMLNode *root);
 CXMLNode *parse_node(const string cxml, CXMLNode *root);
 CXMLNode *parse_from_string(const string cxml);
 CXMLNode *search(const string target, CXMLNode *root);
+
 #endif
