@@ -180,6 +180,7 @@ CXMLNode *parse_node(const string cxml, CXMLNode *root)
         root->parent = st.top();
 
         //cout << "栈顶元素:" << st.top()->name << std::endl;
+        //cout << st.top()->name << "子加入:" << root->name << std::endl;
         st.top()->children.push_back(root);
         //解析单口标签
         if (is_open(root->name) == true)
@@ -223,28 +224,29 @@ CXMLNode *parse_from_string(const string cxml)
     root->parent = head;
     st.push(head);
     head->children.push_back(parse_node(str, root));
+    head->children.pop_back();
     return head;
 }
 
-map<CXMLNode *, bool> used;
-//dfs搜索
-CXMLNode *search(const string target, CXMLNode *root)
-{
-    //cout << (root->name == target) << std::endl;
-    if (root->name == target)
-    {
-        return root;
-    }
-    for (auto m : root->children)
-    {
-        if (used.count(m) == 0)
-        {
-            used.insert({m, true});
-            CXMLNode *result = search(target, m);
-            if (result != nullptr)
-                return result;
-            used.erase(m);
-        }
-    }
-    return nullptr;
-}
+// map<CXMLNode *, bool> used;
+// //dfs搜索
+// CXMLNode *search(const string target, CXMLNode *root)
+// {
+//     //cout << (root->name == target) << std::endl;
+//     if (root->name == target)
+//     {
+//         return root;
+//     }
+//     for (auto m : root->children)
+//     {
+//         if (used.count(m) == 0)
+//         {
+//             used.insert({m, true});
+//             CXMLNode *result = search(target, m);
+//             if (result != nullptr)
+//                 return result;
+//             used.erase(m);
+//         }
+//     }
+//     return nullptr;
+// }

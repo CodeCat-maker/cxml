@@ -1,12 +1,13 @@
 #include "src/parser.hpp"
 #include "src/xpath.hpp"
 extern int CXML_PARSER_STATUS; //解析状态
-
+extern int XPATH_PARSE_STATUE;
 int main()
 {
     using std::cout;
     using std::endl;
-
+    clock_t start, end;
+    start = clock();
     CXMLNode *root = parse_from_string("\
         <bookstore company=\"codecat\" boss=\"man\">\n\
             <book category=\"CHILDREN\">\n\
@@ -22,14 +23,36 @@ int main()
                 <price>39.95 </price>\n\
             </book>\n\
         </bookstore>");
+    //cout << root->children.size() << endl;
     if (CXML_PARSER_STATUS == CXML_SYNTAX_ERROR)
     {
-        std::puts(">解析异常");
+        std::puts(">xml解析异常");
         return 0;
     }
-    std::puts(">解析成功");
-    const CXMLNode_result *result = xpath("/book", root);
+    else
+    {
+        std::puts(">xml解析成功");
+    }
 
+    const CXMLNode_result *result = xpath("/bookstore/book[@category=CHILDREN]/@category", root);
+
+    if (XPATH_PARSE_STATUE == XPATH_SYNTAX_ERROR)
+    {
+        std::puts(">xpath解析异常");
+        return 0;
+    }
+    else
+    {
+        std::puts(">xpath解析成功");
+    }
+
+    CXMLNode *tmp_node = result->element;
+
+    cout << tmp_node->name;
+    cout << result->text;
+
+    end = clock();
+    cout << "\n\n函数运行花费:" << (double)(end - start) / CLOCKS_PER_SEC << "秒";
     // CXMLNode *result = search("book", root);
     // cout << result->children.size() << endl;
     // using std::puts;

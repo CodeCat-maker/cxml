@@ -9,7 +9,9 @@
 #define XPATH_TYPE_ELEM 2
 
 #include "cxml.hpp"
-CXMLNode_result *xpath_option(const string exp, CXMLNode *root);
+#include <queue>
+bool get_xpath_option(const string exp);
+bool do_xpath_option(CXMLNode *root, CXMLNode_result &result);
 const CXMLNode_result *xpath(const string exp, CXMLNode *root);
 
 #endif
