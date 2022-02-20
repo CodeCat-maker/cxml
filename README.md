@@ -147,10 +147,12 @@ make ..
 故文档结构就是这个样子了:
 
 ```
-cxml.cc
 cxml.hpp
 cxml_class.cc
 cxml_class.hpp
+xpath.hpp
+xpath.cc
+cxml.cc
 parser.hpp
 ```
 
@@ -450,7 +452,7 @@ CXMLNode *xpath_get_node_from_genera_by_name(const string name, CXMLNode *root)
 
 ### 5.用到的数据结构
 
-栈、双链表，图，队列，元组
+栈、双链表，树，队列，元组
 
 ### 6.用到的 STL 容器
 
