@@ -34,8 +34,8 @@ int main()
         std::puts(">xml解析成功");
     }
 
-    const CXMLNode_result *result = xpath("/bookstore/book[@category=CHILDREN]/@category", root);
-
+    const CXMLNode_result *result1 = xpath("/bookstore/book[@category=CHILDREN]/@category//text()", root);
+    const CXMLNode_result *result2 = xpath("/bookstore/book/title/../price/text()", root);
     if (XPATH_PARSE_STATUE == XPATH_SYNTAX_ERROR)
     {
         std::puts(">xpath解析异常");
@@ -45,14 +45,11 @@ int main()
     {
         std::puts(">xpath解析成功");
     }
-
-    CXMLNode *tmp_node = result->element;
-
-    cout << tmp_node->name;
-    cout << result->text;
+    cout << "测试样例1:" << result1->text << endl;
+    cout << "测试样例2:" << result2->text << endl;
 
     end = clock();
-    cout << "\n\n函数运行花费:" << (double)(end - start) / CLOCKS_PER_SEC << "秒";
+    cout << "\n函数运行花费:" << (double)(end - start) / CLOCKS_PER_SEC << "秒";
     // CXMLNode *result = search("book", root);
     // cout << result->children.size() << endl;
     // using std::puts;

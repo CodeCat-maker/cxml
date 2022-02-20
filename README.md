@@ -1,6 +1,6 @@
-# CXML ![](https://img.shields.io/badge/license-MIT-blue)![](https://img.shields.io/badge/language-c%2B%2B-blue)![](https://img.shields.io/badge/version-1.0-blue)
+# CXML ![](https://img.shields.io/badge/license-MIT-blue)![](https://img.shields.io/badge/language-c%2B%2B-blue)![](https://img.shields.io/badge/version-2.0-blue)
 
-c++ 解析 xml 文档
+c++ 解析 xml 文档 支持 xpath 语法
 
 ## 前言
 
@@ -20,17 +20,21 @@ git clone https://github.com/CodeCat-maker/cxml.git
 
 ```c++
 #include "src/parser.hpp"
-
+#include "src/xpath.hpp"
+extern int CXML_PARSER_STATUS; //解析状态
+extern int XPATH_PARSE_STATUE;
 int main()
 {
     using std::cout;
     using std::endl;
+    clock_t start, end;
+    start = clock();
     CXMLNode *root = parse_from_string("\
         <bookstore company=\"codecat\" boss=\"man\">\n\
             <book category=\"CHILDREN\">\n\
                 <title>Harry Potter</title>\n\
                 <author>J K.Rowlingk</author>\n\
-                <year>2005</year>\n\
+                <year>2005</year><br>\n\
                 <price>29.99 </price>\n\
             </book>\n\
             <book category=\"WEB\">\n\
@@ -40,30 +44,50 @@ int main()
                 <price>39.95 </price>\n\
             </book>\n\
         </bookstore>");
-    //开始搜索
-    CXMLNode *result = search("book", root);
+    //cout << root->children.size() << endl;
+    if (CXML_PARSER_STATUS == CXML_SYNTAX_ERROR)
+    {
+        std::puts(">xml解析异常");
+        return 0;
+    }
+    else
+    {
+        std::puts(">xml解析成功");
+    }
 
-    cout << result->children.size() << endl;
-    using std::puts;
-    puts("解析到的属性:");
-    if (result->attr != nullptr)
+    const CXMLNode_result *result1 = xpath("/bookstore/book[@category=CHILDREN]/@category//text()", root);
+    const CXMLNode_result *result2 = xpath("/bookstore/book/title/../price/text()", root);
+    if (XPATH_PARSE_STATUE == XPATH_SYNTAX_ERROR)
     {
-        for (auto m : result->attr->attributes)
-        {
-            //属性
-            cout << "key:" << m.first << " value:" << m.second << endl;
-        }
+        std::puts(">xpath解析异常");
+        return 0;
     }
-    //
-    puts("解析子节点 及节点值");
-    for (auto m : result->children)
+    else
     {
-        //节点名称
-        cout << m->name << ":" << m->text->content << endl;
+        std::puts(">xpath解析成功");
     }
+    cout << "测试样例1:" << result1->text << endl;
+    cout << "测试样例2:" << result2->text << endl;
+
+    end = clock();
+    cout << "\n\n函数运行花费:" << (double)(end - start) / CLOCKS_PER_SEC << "秒";
     return 0;
 }
 ```
+
+## 支持的 xpath 语法
+
+- /name 选择当前元素子元素中的 name 元素
+- //name 选择当前元素后代元素中的 name 元素
+- /. 选择当前元素
+- /.. 选择父元素
+- /name[@attr=value] 属性筛选，选择 attr 属性的值为 value 的 name 元素(属性值不加分号)
+- /name[@attr] 属性筛选，选择有 attr 属性的元素
+- /name[n] 选择当前元素下第 n 个 name 元素
+- /text() 返回当前元素中的文本
+- /@attr 返回当前元素 attr 属性的值
+- //text() 返回当前元素以及它所有后代元素中的文本
+- //@attr 返回当前元素以及它所有后代元素中 attr 属性的值
 
 ## Cmakelists
 
@@ -89,16 +113,15 @@ cmake .
 make ..
 ```
 
-## 反馈
+## 结果
 
 ```
-解析到的属性:
-key:category value:CHILDREN
-解析子节点 及节点值
-title:Harry Potter
-author:J K.Rowlingk
-year:2005
-price:29.99
+>xml解析成功
+>xpath解析成功
+测试样例1:CHILDREN
+测试样例2:   Harry Potter J K.Rowlingk 2005  29.99  Learning XML Erik T.Ray 2003  39.95
+
+函数运行花费:0.000312秒
 ```
 
 # 设计
@@ -107,19 +130,19 @@ price:29.99
 
 ### 1.读入
 
-​ 1.从文档读入
+1.从文档读入
 
-​ 2.从字符串读入
+2.从字符串读入
 
 ### 2.解析
 
-​ 1.解析当前标签名
+1.解析当前标签名
 
-​ 2.解析标签属性
+2.解析标签属性
 
-​ 3.解析标签值
+3.解析标签值
 
-​ 4.构建 xml 树
+4.构建 xml 树
 
 故文档结构就是这个样子了:
 
@@ -247,11 +270,189 @@ CXMLNode *parse_node(const string cxml, CXMLNode *root)
 }
 ```
 
-### 4.用到的数据结构
+### 4.如何解析 xpath 语法
 
-栈、双链表，图
+#### 思路：
 
-### 5.用到的 STL 容器
+从左到右用双指针算法将操作名称和操作对象名放入队列中，利用队列先进先出的特性，依次进行解析
+
+##### 常量名
+
+```c++
+const string options[] = {
+    "get_parent_node",                // /.. 选择父元素 ✅
+    "get_this_node",                  // /. 选择当前元素 ✅
+    "get_all_nodes",                  // /* 匹配任意元素
+    "get_node_from_genera_by_name",   // //name 选择当前元素后代元素中的name元素 ✅
+    "get_node_from_child_by_name",    // /name 选择当前元素子代元素中的name元素 ✅
+    "get_node_by_array_and_name",     // /name[n] 选择当前元素下第n个name元素 ✅
+    "get_node_by_attr_and_name",      // /name[@attr] 属性筛选，选择有attr属性的元素 ✅
+    "get_node_by_attrValue_and_name", // /name[@attr=value] 属性筛选，选择attr属性的值为value的name元素(属性值不加分号) ✅
+    "get_text_from_this",             // /text() 返回当前元素中的文本 ✅
+    "get_texts_from_genera",          // //text() 返回当前元素以及它所有后代元素中的文本 ✅
+    "get_attr_from_this",             // /@attr 返回当前元素attr属性的值 ✅
+    "get_all_attr"                    // @* 匹配任意属性};
+};
+```
+
+##### 双指针算法入队
+
+```c++
+bool get_xpath_option(const string exp)
+{
+    int l(0), r(0);
+    int len = 0;
+
+    while (len <= exp.length())
+    {
+
+        if ((exp[len] == '/'))
+        {
+            if (exp[len + 1] == '/')
+                r = l + 2;
+            else
+                r = l + 1;
+            while (r <= exp.length())
+            {
+                if (exp[r] == '/')
+                    break;
+                r++;
+            }
+            string tmp_option = exp.substr(l, r - l);
+            //cout << tmp_option << " ";
+            queue_option.push(parse_option(tmp_option));
+        }
+        len = r;
+        l = r;
+    }
+    //string name = exp.substr(0, len);
+    return true;
+}
+```
+
+##### switch 处理队列操作
+
+```c++
+bool do_xpath_option(CXMLNode *root, CXMLNode_result *result)
+{
+    CXMLNode *node = root;
+    string ret_text;
+    while (queue_option.empty() == false)
+    {
+        pair<string, string> op = queue_option.front();
+        queue_option.pop();
+        string option = op.first;
+        string name = op.second;
+        //cout << option << " " << name << endl;
+        switch (str2int(option.c_str()))
+        {
+        case str2int("get_node_from_genera_by_name"):
+            node = xpath_get_node_from_genera_by_name(name, node);
+            result->element = node;
+            break;
+        case str2int("get_node_from_child_by_name"):
+            node = xpath_get_node_from_child_by_name(name, node);
+            result->element = node;
+            break;
+        case str2int("get_node_by_array_and_name"):
+            node = xpath_get_node_by_array_and_name(name, node);
+            result->element = node;
+            break;
+        case str2int("get_node_by_attr_and_name"):
+            node = xpath_get_node_by_attr_and_name(name, node);
+            result->element = node;
+            break;
+        case str2int("get_node_by_attrValue_and_name"):
+            node = xpath_get_node_by_attrValue_and_name(name, node);
+            result->element = node;
+            break;
+        case str2int("get_text_from_this"):
+            ret_text = xpath_get_text_from_this(node);
+            result->text = ret_text;
+            return true;
+        case str2int("get_texts_from_genera"):
+            ret_text = xpath_get_texts_from_genera(node);
+            result->text = ret_text;
+            return true;
+        case str2int("get_this_node"):
+            node = xpath_get_this_node(node);
+            result->element = node;
+            break;
+        case str2int("get_parent_node"):
+            node = xpath_get_parent_node(node);
+            result->element = node;
+            break;
+        case str2int("get_attr_from_this"):
+            ret_text = xpath_get_attr_from_this(name, node);
+            result->text = ret_text;
+            return true;
+        default:
+            return false;
+        }
+    }
+    return true;
+}
+```
+
+##### bfs 算法
+
+搜索全部文本名称
+
+```c++
+string xpath_get_texts_from_genera(CXMLNode *root)
+{
+    pair<CXMLNode *, bool> d;
+    queue<CXMLNode *> q;
+    q.push(root);
+    string ret;
+    while (!q.empty())
+    {
+        auto p = q.front();
+        q.pop();
+        for (auto m : p->children)
+        {
+            auto t = m->text;
+            ret += t->content + " ";
+            q.push(m);
+        }
+    }
+    return ret;
+}
+```
+
+##### dfs 搜索
+
+搜索符合条件的元素
+
+```c++
+map<CXMLNode *, bool> used;
+//选择当前元素后代元素中的name元素
+CXMLNode *xpath_get_node_from_genera_by_name(const string name, CXMLNode *root)
+{
+    if (root->name == name)
+    {
+        return root;
+    }
+    for (auto m : root->children)
+    {
+        if (used.count(m) == 0)
+        {
+            used.insert({m, true});
+            CXMLNode *result = xpath_get_node_from_genera_by_name(name, m);
+            if (result != nullptr)
+                return result;
+            used.erase(m);
+        }
+    }
+    return nullptr;
+}
+```
+
+### 5.用到的数据结构
+
+栈、双链表，图，队列，元组
+
+### 6.用到的 STL 容器
 
 vector 动态数组
 
@@ -259,14 +460,18 @@ map 哈希表
 
 string 字符串
 
+pair 元组
+
+stack 栈
+
+queue 队列
+
 #### 6.用到的算法
 
-dfs
+dfs bfs 双指针
 
 ## 2.后期完善工作
 
-1.支持 xpath 语法
-
-2.支持 html 解析
+1.支持 html 解析
 
 # 欢迎 Fork 和 Pr
