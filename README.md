@@ -2,6 +2,8 @@
 
 c++ 解析 xml 文档 支持 xpath 语法
 
+[TOC]
+
 ## 前言
 
 因为我叫 codecat，所以我的 XML 就叫 CXML
