@@ -2,7 +2,7 @@
 
 c++ 解析 xml 文档 支持 xpath 语法
 
-- [CXML ![](https://img.shields.io/badge/license-MIT-blue)![](https://img.shields.io/badge/language-c%2B%2B-blue)![](https://img.shields.io/badge/version-2.0-blue)](#cxml-----https---imgshieldsio-badge-license-mit-blue-----https---imgshieldsio-badge-language-c-2b-2b-blue-----https---imgshieldsio-badge-version-20-blue-)
+- [CXML](#cxml-----https---imgshieldsio-badge-license-mit-blue-----https---imgshieldsio-badge-language-c-2b-2b-blue-----https---imgshieldsio-badge-version-20-blue-)
   - [前言](#--)
 - [如何使用](#----)
   - [下载安装](#----)
