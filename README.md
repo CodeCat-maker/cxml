@@ -2,7 +2,35 @@
 
 c++ 解析 xml 文档 支持 xpath 语法
 
-[TOC]
+- [CXML ![](https://img.shields.io/badge/license-MIT-blue)![](https://img.shields.io/badge/language-c%2B%2B-blue)![](https://img.shields.io/badge/version-2.0-blue)](#cxml-----https---imgshieldsio-badge-license-mit-blue-----https---imgshieldsio-badge-language-c-2b-2b-blue-----https---imgshieldsio-badge-version-20-blue-)
+  - [前言](#--)
+- [如何使用](#----)
+  - [下载安装](#----)
+  - [使用 DEMO](#---demo)
+  - [支持的 xpath 语法](#----xpath---)
+  - [Cmakelists](#cmakelists)
+  - [编译](#--)
+  - [结果](#--)
+- [设计](#--)
+  - [1.主逻辑](#1---)
+    - [1.读入](#1--)
+    - [2.解析](#2--)
+    - [2.如何解析](#2----)
+    - [3. 如何建立 XML 树](#3------xml--)
+    - [4.如何解析 xpath 语法](#4-----xpath---)
+      - [思路：](#---)
+        - [常量名](#---)
+        - [双指针算法入队](#-------)
+        - [switch 处理队列操作](#switch-------)
+        - [bfs 算法](#bfs---)
+        - [dfs 搜索](#dfs---)
+    - [5.用到的数据结构](#5-------)
+    - [6.用到的 STL 容器](#6----stl---)
+      - [6.用到的算法](#6-----)
+  - [2.后期完善工作](#2------)
+- [欢迎 Fork 和 Pr](#---fork---pr)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 ## 前言
 
