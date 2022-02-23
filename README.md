@@ -148,10 +148,10 @@ make ..
 ```
 >xml解析成功
 >xpath解析成功
-测试样例1:CHILDREN
-测试样例2:   Harry Potter J K.Rowlingk 2005  29.99  Learning XML Erik T.Ray 2003  39.95
+测试样例1:Harry Potter J K.Rowlingk 2005  29.99  
+测试样例2:29.99 
 
-函数运行花费:0.000312秒
+函数运行花费:0.000135秒
 ```
 
 # 设计
@@ -249,6 +249,150 @@ CXMLNode *parse_from_string(const string cxml)
 
 ![](https://i.bmp.ovh/imgs/2022/02/f99c226b653a1ac8.png)
 
+根目录树结构
+```json
+{
+  "Node": {
+    "name": [],
+    "next": [],
+    "perv": []
+  },
+  "content": {
+    "__r_": []
+  },
+  "parent": "NULL",
+  "children": {
+    "[0]": {
+      "Node": {
+        "name": {
+          "__r_": {
+            "std::__1::__compressed_pair_elem<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__rep, 0, false>": []
+          }
+        },
+        "next": "NULL",
+        "perv": "NULL"
+      },
+      "content": {
+        "__r_": {
+          "std::__1::__compressed_pair_elem<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__rep, 0, false>": []
+        }
+      },
+      "parent": {
+        "Node": {
+          "name": [],
+          "next": [],
+          "perv": []
+        },
+        "content": {
+          "__r_": []
+        },
+        "parent": "NULL",
+        "children": {
+          "[0]": []
+        },
+        "attr": "NULL",
+        "text": "NULL"
+      },
+      "children": {
+        "[0]": {
+          "Node": {
+            "name": [],
+            "next": [],
+            "perv": []
+          },
+          "content": {
+            "__r_": []
+          },
+          "parent": {
+            "Node": [],
+            "content": [],
+            "parent": [],
+            "children": [],
+            "attr": [],
+            "text": []
+          },
+          "children": {
+            "[0]": [],
+            "[1]": [],
+            "[2]": [],
+            "[3]": [],
+            "[4]": []
+          },
+          "attr": {
+            "Node": [],
+            "attributes": [],
+            "nums": []
+          },
+          "text": {
+            "Node": [],
+            "content": [],
+            "lens": []
+          }
+        },
+        "[1]": {
+          "Node": {
+            "name": [],
+            "next": [],
+            "perv": []
+          },
+          "content": {
+            "__r_": []
+          },
+          "parent": {
+            "Node": [],
+            "content": [],
+            "parent": [],
+            "children": [],
+            "attr": [],
+            "text": []
+          },
+          "children": {
+            "[0]": [],
+            "[1]": [],
+            "[2]": [],
+            "[3]": []
+          },
+          "attr": {
+            "Node": [],
+            "attributes": [],
+            "nums": []
+          },
+          "text": {
+            "Node": [],
+            "content": [],
+            "lens": []
+          }
+        }
+      },
+      "attr": {
+        "Node": {
+          "name": [],
+          "next": [],
+          "perv": []
+        },
+        "attributes": {
+          "[0]": [],
+          "[1]": []
+        },
+        "nums": "2"
+      },
+      "text": {
+        "Node": {
+          "name": [],
+          "next": [],
+          "perv": []
+        },
+        "content": {
+          "__r_": []
+        },
+        "lens": "0"
+      }
+    }
+  },
+  "attr": "NULL",
+  "text": "NULL"
+}
+```
 我在这里建树的思路是：
 
 建立一个 stack 堆，将标签<name>都丢进去，一层一层，如果遇到</name>的，就将 stack 栈顶 pop 出来，代表当前节点已经废弃，并且入栈的时候按照的是父子关系，因为如果有不是子的就已经 pop 出去了，所以我们很容易建立一个关系
