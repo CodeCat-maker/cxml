@@ -14,10 +14,10 @@ public:
     string name; //节点名称
     Node *next;  //前节点指针
     Node *perv;  //后节点指针
-    string getName()
-    {
-        return name;
-    }
+//    string getName()
+//    {
+//        return name;
+//    }
 };
 //每个节点的属性
 class CXMLNode_attr : public Node
@@ -61,7 +61,7 @@ public:
     //获取所有子节点
     vector<CXMLNode *> get_children() const;
     //获取子节点数量
-    int get_children_size() const;
+//    int get_children_size() const;
 };
 //xpath解析结果
 class CXMLNode_result

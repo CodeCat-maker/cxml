@@ -34,7 +34,7 @@ int main()
         std::puts(">xml解析成功");
     }
 
-    const CXMLNode_result *result1 = xpath("/bookstore/book[@category=CHILDREN]/@category//text()", root);
+    const CXMLNode_result *result1 = xpath("/bookstore/book[@category=CHILDREN]//text()", root);
     const CXMLNode_result *result2 = xpath("/bookstore/book/title/../price/text()", root);
     if (XPATH_PARSE_STATUE == XPATH_SYNTAX_ERROR)
     {
